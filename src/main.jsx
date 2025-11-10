@@ -8,6 +8,7 @@ import AllMovies from "./pages/AllMovies.jsx";
 import MyCollection from "./pages/MyCollection.jsx";
 import Login from "./pages/Login.jsx";
 import AuthProvider from "./provider/AuthProvider.jsx"; // ✅ AuthProvider ইমপোর্ট করা হয়েছে
+import Register from "./pages/Register.jsx";
 
 // ✅ Router Setup
 const router = createBrowserRouter([
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         path: "login",
         element: <Login />,
       },
+      {
+        path: "register",
+        element: <Register />,
+      },
     ],
   },
 ]);
@@ -43,4 +48,3 @@ createRoot(document.getElementById("root")).render(
     </AuthProvider>
   </StrictMode>
 );
-
