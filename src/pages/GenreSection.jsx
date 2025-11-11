@@ -32,20 +32,22 @@ const GenreSection = () => {
         <Swiper
           slidesPerView={6}
           spaceBetween={20}
-          loop={true} 
+          loop={true}
           speed={4000}
           autoplay={{
-            delay: 1000, // কোন delay নেই
-            disableOnInteraction: false, // ইউজার interaction এও চলবে
+            delay: 0,
+            disableOnInteraction: false,
           }}
           modules={[Autoplay]}
         >
-          {genres.map((genre, index) => (
+          {genres.concat(genres).map((genre, index) => (
             <SwiperSlide key={index}>
               <div>
+                {" "}
                 <button className="btn btn-dash btn-warning py-4 px-6 rounded-full text-lg font-medium hover:scale-105 transition-transform duration-300">
-                        {genre}
-                      </button>
+                  {" "}
+                  {genre}{" "}
+                </button>{" "}
               </div>
             </SwiperSlide>
           ))}

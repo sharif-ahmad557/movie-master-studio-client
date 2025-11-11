@@ -11,12 +11,8 @@ const RecentlyAdded = () => {
         const moviesWithPoster = data.filter((movie) => movie.posterUrl);
 
         const recent = moviesWithPoster
-          .sort(
-            (a, b) =>
-              new Date(b.addedAt || b.joinedAt) -
-              new Date(a.addedAt || a.joinedAt)
-          )
-          .slice(0, 6);
+          .sort((a, b) => b.releaseYear - a.releaseYear) 
+          .slice(0, 6); 
 
         setRecentMovies(recent);
         setLoading(false);
@@ -54,8 +50,11 @@ const RecentlyAdded = () => {
                 <div className="p-4 text-center">
                   <h3 className="text-lg font-semibold mb-1">{movie.title}</h3>
                   <p className="text-gray-400 font-medium mb-2">
-                    director: {movie.director}</p>
-                  <p className="text-gray-400 font-medium mb-2">releaseYear: {movie.releaseYear}</p>
+                    Director: {movie.director}
+                  </p>
+                  <p className="text-gray-400 font-medium mb-2">
+                    Release Year: {movie.releaseYear}
+                  </p>
                   <p className="text-yellow-400 font-bold text-md">
                     ⭐ {movie.rating.toFixed(1)}
                   </p>

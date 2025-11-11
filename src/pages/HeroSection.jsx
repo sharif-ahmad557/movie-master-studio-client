@@ -55,7 +55,7 @@ const HeroSection = () => {
           <Slider {...settings} className="overflow-hidden">
             {movies.map((movie) => (
               <div key={movie._id} className="px-3">
-                <div className="relative h-[500px] md:h-[500px] rounded-xl overflow-hidden shadow-lg">
+                <div className="relative h-[500px] md:h-[500px] rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300">
                   <img
                     src={movie.posterUrl}
                     alt={movie.title}

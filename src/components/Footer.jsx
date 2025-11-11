@@ -3,7 +3,7 @@ import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-gradient-to-r from-teal-600 via-purple-700 to-indigo-700 text-white pt-16">
+    <footer className="relative bg-gradient-to-r from-teal-600 via-purple-700 to-indigo-700 text-white pt-16 pb-10">
       {/* Curved top edge */}
       <div className="absolute -top-10 left-0 w-full overflow-hidden leading-none rotate-180">
         <svg
