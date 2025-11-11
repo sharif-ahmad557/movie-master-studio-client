@@ -53,9 +53,9 @@ const RecentlyAdded = () => {
                 />
                 <div className="p-4 text-center">
                   <h3 className="text-lg font-semibold mb-1">{movie.title}</h3>
-                  <p className="text-gray-400 mb-2">
-                    {movie.director} | {movie.releaseYear}
-                  </p>
+                  <p className="text-gray-400 font-medium mb-2">
+                    director: {movie.director}</p>
+                  <p className="text-gray-400 font-medium mb-2">releaseYear: {movie.releaseYear}</p>
                   <p className="text-yellow-400 font-bold text-md">
                     ⭐ {movie.rating.toFixed(1)}
                   </p>
