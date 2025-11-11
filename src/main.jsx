@@ -2,7 +2,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Toaster } from "react-hot-toast"; // ✅ Import Toaster
+import { Toaster } from "react-hot-toast";
+import AuthProvider from "./provider/AuthProvider.jsx";
 
 import MainLayout from "./layout/MainLayout.jsx";
 import Home from "./pages/Home.jsx";
@@ -10,9 +11,9 @@ import AllMovies from "./pages/AllMovies.jsx";
 import MyCollection from "./pages/MyCollection.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
-import AuthProvider from "./provider/AuthProvider.jsx";
 import Profile from "./pages/Profile.jsx";
 import MovieDetails from "./pages/MovieDetails.jsx";
+import UpdateMovie from "./pages/UpdateMovie.jsx";
 
 // ✅ Router Setup
 const router = createBrowserRouter([
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
         path: "movies/:id",
         element: <MovieDetails />,
       },
+      { path: "update/:id", element: <UpdateMovie /> },
     ],
   },
 ]);
@@ -41,11 +43,10 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-      {/* 🔹 Toaster wrap করা হলো */}
-      <>
-        <Toaster position="top-right" reverseOrder={false} />
-        <RouterProvider router={router} />
-      </>
+      {/* 🔹 Toast Container */}
+      <Toaster position="top-right" reverseOrder={false} />
+      {/* 🔹 Routes */}
+      <RouterProvider router={router} />
     </AuthProvider>
   </StrictMode>
 );

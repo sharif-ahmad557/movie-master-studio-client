@@ -1,43 +1,65 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../provider/AuthProvider";
+import toast from "react-hot-toast";
 
-const MovieDetails = ({ currentUserEmail }) => {
-  const { id } = useParams();
+const MovieDetails = () => {
+  const { id } = useParams(); // URL থেকে মুভির _id
   const [movie, setMovie] = useState(null);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext); // লগইন ইউজার
 
+  // 🎬 মুভি ডেটা লোড করা
   useEffect(() => {
     fetch(`http://localhost:3000/movies/${id}`)
       .then((res) => res.json())
       .then((data) => setMovie(data))
-      .catch((err) => console.error(err));
+      .catch(() => toast.error("Failed to load movie details"));
   }, [id]);
 
+  // ❌ ডিলিট হ্যান্ডলার
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this movie?")) {
       fetch(`http://localhost:3000/movies/${id}`, {
         method: "DELETE",
       })
-        .then(() => navigate("/all-movies"))
-        .catch((err) => console.error(err));
+        .then((res) => {
+          if (res.ok) {
+            toast.success("Movie deleted successfully!");
+            navigate("/allmovies");
+          } else {
+            toast.error("Failed to delete movie!");
+          }
+        })
+        .catch(() => toast.error("Something went wrong!"));
     }
   };
 
+  // ⏳ লোডিং স্টেট
   if (!movie)
     return <p className="text-center mt-10 text-gray-400">Loading...</p>;
 
-  const isOwner = movie.email === currentUserEmail;
+  // ✅ মালিক চেক
+  const isOwner = user?.email && movie.email === user.email;
 
   return (
-    <div className="w-11/12 mx-auto py-16 bg-gray-950 text-white rounded-2xl">
-      <div className="flex flex-col md:flex-row px-4 gap-8">
+    <div className="w-11/12 mx-auto py-16 text-white">
+      <div className="flex flex-col md:flex-row gap-8 bg-gray-900 p-6 rounded-2xl shadow-lg">
+        {/* 🎥 Poster */}
         <img
-          src={movie.posterUrl || "https://via.placeholder.com/300x450"}
+          src={
+            movie.posterUrl ||
+            "https://via.placeholder.com/400x600?text=No+Poster"
+          }
           alt={movie.title}
-          className="w-full md:w-1/3 rounded-2xl shadow-lg"
+          className="w-full md:w-1/3 rounded-2xl object-cover shadow-lg"
         />
+
+        {/* 📋 Details */}
         <div className="md:w-2/3">
-          <h2 className="text-3xl font-bold mb-4">{movie.title}</h2>
+          <h2 className="text-4xl font-bold mb-4 text-yellow-400">
+            {movie.title}
+          </h2>
           <p className="mb-2">
             <strong>Genre:</strong> {movie.genre}
           </p>
@@ -51,27 +73,38 @@ const MovieDetails = ({ currentUserEmail }) => {
             <strong>Release Year:</strong> {movie.releaseYear}
           </p>
           <p className="mb-2">
-            <strong>Rating:</strong> ⭐ {movie.rating.toFixed(1)}
+            <strong>Language:</strong> {movie.language}
+          </p>
+          <p className="mb-2">
+            <strong>Country:</strong> {movie.country}
+          </p>
+          <p className="mb-2">
+            <strong>Rating:</strong> ⭐ {movie.rating?.toFixed(1)}
           </p>
           <p className="mb-4">
             <strong>Plot:</strong> {movie.plotSummary}
           </p>
 
-          {isOwner && (
-            <div className="flex gap-4">
+          {/* 👑 মালিক হলে Edit/Delete */}
+          {isOwner ? (
+            <div className="flex gap-4 mt-6">
               <button
-                onClick={() => navigate(`/update-movie/${id}`)}
-                className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-full text-black transition"
+                onClick={() => navigate(`/update/${movie._id}`)}
+                className="btn btn-dash btn-warning mt-2"
               >
-                Edit
+                ✏️ Edit
               </button>
               <button
                 onClick={handleDelete}
-                className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-full text-black transition"
+                className="btn btn-dash btn-warning mt-2"
               >
-                Delete
+                🗑️ Delete
               </button>
             </div>
+          ) : (
+            <p className="mt-6 text-gray-400 italic">
+              You can only edit or delete movies you’ve added.
+            </p>
           )}
         </div>
       </div>
