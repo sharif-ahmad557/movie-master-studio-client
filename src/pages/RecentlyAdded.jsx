@@ -8,14 +8,16 @@ const RecentlyAdded = () => {
     fetch("http://localhost:3000/movies")
       .then((res) => res.json())
       .then((data) => {
-        // যোগ হওয়ার তারিখ অনুযায়ী sort করে top 6 নেওয়া
-        const recent = data
+        const moviesWithPoster = data.filter((movie) => movie.posterUrl);
+
+        const recent = moviesWithPoster
           .sort(
             (a, b) =>
-              new Date(b.joinedAt || b.addedAt) -
-              new Date(a.joinedAt || a.addedAt)
+              new Date(b.addedAt || b.joinedAt) -
+              new Date(a.addedAt || a.joinedAt)
           )
           .slice(0, 6);
+
         setRecentMovies(recent);
         setLoading(false);
       })
@@ -38,20 +40,22 @@ const RecentlyAdded = () => {
         {loading ? (
           <p className="text-gray-400">Loading recently added movies...</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {recentMovies.map((movie) => (
               <div
                 key={movie._id}
                 className="bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
               >
                 <img
-                  src={movie.poster || "https://via.placeholder.com/200x300"}
+                  src={movie.posterUrl || "https://via.placeholder.com/200x300"}
                   alt={movie.title}
                   className="w-full h-64 object-cover"
                 />
                 <div className="p-4 text-center">
                   <h3 className="text-lg font-semibold mb-1">{movie.title}</h3>
-                  <p className="text-gray-400 mb-2">{movie.director}</p>
+                  <p className="text-gray-400 mb-2">
+                    {movie.director} | {movie.releaseYear}
+                  </p>
                   <p className="text-yellow-400 font-bold text-md">
                     ⭐ {movie.rating.toFixed(1)}
                   </p>

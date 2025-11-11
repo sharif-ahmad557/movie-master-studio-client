@@ -31,7 +31,7 @@ const TopRatedMovies = () => {
         {loading ? (
           <p className="text-gray-400">Loading top movies...</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {topMovies.map((movie) => (
               <div
                 key={movie._id}

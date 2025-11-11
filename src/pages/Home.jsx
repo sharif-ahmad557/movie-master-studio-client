@@ -10,6 +10,7 @@ const Home = () => {
       <HeroSection />
       <StatisticsSection />
       <TopRatedMovies />
+      <RecentlyAdded />
     </div>
   );
 };
