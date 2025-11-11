@@ -12,6 +12,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import AuthProvider from "./provider/AuthProvider.jsx";
 import Profile from "./pages/Profile.jsx";
+import MovieDetails from "./pages/MovieDetails.jsx";
 
 // ✅ Router Setup
 const router = createBrowserRouter([
@@ -19,25 +20,19 @@ const router = createBrowserRouter([
     path: "/",
     element: <MainLayout />,
     children: [
-      { index: true, 
-      element: <Home /> 
-    }, 
-      { path: "allmovies", 
-        element: <AllMovies /> 
-      },
-      { path: "mycollection", 
-        element: <MyCollection /> 
-      },
-      { path: "login",   
-        element: <Login /> 
-      },
-      { path: "register", 
-        element: <Register /> 
-      },
+      { index: true, element: <Home /> },
+      { path: "allmovies", element: <AllMovies /> },
+      { path: "mycollection", element: <MyCollection /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
       {
         path: "profile",
         element: <Profile />,
-      }
+      },
+      {
+        path: "movies/:id",
+        element: <MovieDetails />,
+      },
     ],
   },
 ]);
