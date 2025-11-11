@@ -23,23 +23,20 @@ const AddMovie = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // Input change handler
   const handleChange = (e) => {
     const { name, value } = e.target;
     setMovie({ ...movie, [name]: value });
   };
 
-  // Submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation: number fields convert
     const newMovie = {
       ...movie,
       releaseYear: Number(movie.releaseYear),
       rating: Number(movie.rating),
       duration: Number(movie.duration),
-      email: user.email, // automatically addedBy current user
+      email: user.email, 
     };
 
     try {
@@ -53,7 +50,7 @@ const AddMovie = () => {
       if (!res.ok) throw new Error("Failed to add movie");
 
       toast.success("Movie added successfully!");
-      navigate("/mycollection"); // or any page you want
+      navigate("/mycollection"); 
     } catch (err) {
       console.error(err);
       toast.error("Failed to add movie");

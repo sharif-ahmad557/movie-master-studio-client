@@ -16,7 +16,6 @@ import MovieDetails from "./pages/MovieDetails.jsx";
 import UpdateMovie from "./pages/UpdateMovie.jsx";
 import AddMovie from "./pages/AddMovie.jsx";
 
-// ✅ Router Setup
 const router = createBrowserRouter([
   {
     path: "/",
@@ -45,13 +44,10 @@ const router = createBrowserRouter([
   },
 ]);
 
-// ✅ Rendering
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-      {/* 🔹 Toast Container */}
       <Toaster position="top-right" reverseOrder={false} />
-      {/* 🔹 Routes */}
       <RouterProvider router={router} />
     </AuthProvider>
   </StrictMode>

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../provider/AuthProvider"; // AuthProvider path ঠিক রাখো
-import { toast } from "react-hot-toast"; // npm install react-hot-toast
+import { AuthContext } from "../provider/AuthProvider";
+import { toast } from "react-hot-toast"; 
 import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
@@ -15,7 +15,7 @@ const Login = () => {
     logIn(email, password)
       .then(() => {
         toast.success("Login successful!");
-        navigate("/"); // Success → Home
+        navigate("/");
       })
       .catch((err) => {
         toast.error(err.message);
@@ -26,7 +26,7 @@ const Login = () => {
     googleSignIn()
       .then(() => {
         toast.success("Google Login successful!");
-        navigate("/"); // Success → Home
+        navigate("/"); 
       })
       .catch((err) => {
         toast.error(err.message);
@@ -67,9 +67,9 @@ const Login = () => {
         </form>
 
         <div className="flex items-center my-4">
-          <hr className="flex-grow border-gray-300" />
+          <hr className="flex-row border-gray-300" />
           <span className="px-2 text-gray-400">or</span>
-          <hr className="flex-grow border-gray-300" />
+          <hr className="flex-row border-gray-300" />
         </div>
 
         <button

@@ -24,7 +24,6 @@ const UpdateMovie = () => {
 
   const [loading, setLoading] = useState(true);
 
-  // 🎯 Load movie data
   useEffect(() => {
     fetch(`http://localhost:3000/movies/${id}`)
       .then((res) => res.json())

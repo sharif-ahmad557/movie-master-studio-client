@@ -1,11 +1,10 @@
 import toast from "react-hot-toast";
 
-// 🔹 সহজ Toast utility object
 const Toast = {
   success: (msg) =>
     toast.success(msg, {
       style: {
-        background: "#10B981", // সবুজ
+        background: "#10B981",
         color: "#fff",
         fontWeight: "500",
       },
@@ -14,7 +13,7 @@ const Toast = {
   error: (msg) =>
     toast.error(msg, {
       style: {
-        background: "#EF4444", // লাল
+        background: "#EF4444",
         color: "#fff",
         fontWeight: "500",
       },
@@ -23,7 +22,7 @@ const Toast = {
   info: (msg) =>
     toast(msg, {
       style: {
-        background: "#3B82F6", // নীল
+        background: "#3B82F6",
         color: "#fff",
       },
     }),
