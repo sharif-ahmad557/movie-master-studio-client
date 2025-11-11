@@ -14,6 +14,7 @@ import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import MovieDetails from "./pages/MovieDetails.jsx";
 import UpdateMovie from "./pages/UpdateMovie.jsx";
+import AddMovie from "./pages/AddMovie.jsx";
 
 // ✅ Router Setup
 const router = createBrowserRouter([
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
         element: <MovieDetails />,
       },
       { path: "update/:id", element: <UpdateMovie /> },
+      { path: "movies/add", element: <AddMovie /> },
     ],
   },
 ]);

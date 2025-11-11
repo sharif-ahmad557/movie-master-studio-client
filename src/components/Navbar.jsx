@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { FaSun, FaMoon, FaUserCircle } from "react-icons/fa";
-import { AuthContext } from "../provider/AuthProvider"; // এখানে তোমার AuthContext ফাইলের পাথ বসাও
+import { AuthContext } from "../provider/AuthProvider";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -17,7 +16,6 @@ const Navbar = () => {
       <div className="navbar w-11/12 mx-auto">
         {/* Left Side */}
         <div className="navbar-start">
-          {/* Hamburger Menu */}
           <div className="dropdown">
             <div tabIndex={0} className="btn btn-ghost lg:hidden">
               <svg
@@ -72,8 +70,6 @@ const Navbar = () => {
 
         {/* Right Side */}
         <div className="navbar-end flex items-center gap-2">
-
-          {/* যদি লগইন থাকে */}
           {user ? (
             <div className="dropdown dropdown-end">
               <div
@@ -102,6 +98,9 @@ const Navbar = () => {
                 </li>
                 <li>
                   <Link to="/profile">Profile</Link>
+                </li>
+                <li>
+                  <Link to="/movies/add">Add Movie</Link>
                 </li>
                 <li>
                   <button
