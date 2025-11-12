@@ -19,7 +19,7 @@ const TopRatedMovies = () => {
   }, []);
 
   return (
-    <div className="w-full bg-gray-900 text-white py-16">
+    <div className="w-full bg-gray-900 text-white py-16 animate__animated animate__fadeInUp">
       <div className="w-11/12 mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-2">
           🌟 Top Rated Movies
@@ -44,8 +44,12 @@ const TopRatedMovies = () => {
                 />
                 <div className="p-4 text-center">
                   <h3 className="text-xl font-semibold mb-1">{movie.title}</h3>
-                  <p className="text-gray-400 font-medium mb-2">director: {movie.director}</p>
-                  <p className="text-gray-400 font-medium mb-2">releaseYear: {movie.releaseYear}</p>
+                  <p className="text-gray-400 font-medium mb-2">
+                    director: {movie.director}
+                  </p>
+                  <p className="text-gray-400 font-medium mb-2">
+                    releaseYear: {movie.releaseYear}
+                  </p>
                   <p className="text-yellow-400 font-bold text-lg">
                     ⭐ {movie.rating.toFixed(1)}
                   </p>

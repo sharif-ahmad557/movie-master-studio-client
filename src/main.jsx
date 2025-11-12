@@ -4,6 +4,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import AuthProvider from "./provider/AuthProvider.jsx";
+import "animate.css";
 
 import MainLayout from "./layout/MainLayout.jsx";
 import Home from "./pages/Home.jsx";

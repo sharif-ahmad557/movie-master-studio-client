@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @plugin "daisyui";
 @plugin "daisyui/theme" {
   name: "light";
@@ -6,7 +7,22 @@
   --color-primary: blue;
   --color-secondary: teal;
 }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-fadeInUp {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
 body {
   background-color: white;
-  
-} 
+}

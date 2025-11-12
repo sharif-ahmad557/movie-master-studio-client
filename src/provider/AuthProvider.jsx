@@ -69,7 +69,7 @@ const AuthProvider = ({ children }) => {
     signIn,
     googleLogin,
     updateUserProfile,
-    updateUserEmail, 
+    updateUserEmail,
     logOut,
   };
 
@@ -77,5 +77,5 @@ const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
-
+export const useAuth = () => useContext(AuthContext);
 export default AuthProvider;
