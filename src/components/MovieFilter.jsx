@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const MovieFilter = () => {
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const [genre, setGenre] = useState("");
   const [minRating, setMinRating] = useState("");
   const [maxRating, setMaxRating] = useState("");
@@ -23,7 +23,9 @@ const MovieFilter = () => {
     const queryString = query.length ? `?${query.join("&")}` : "";
 
     try {
-      const res = await fetch(`http://localhost:3000/movies${queryString}`);
+      const res = await fetch(
+        `https://movie-master-studio-server.vercel.app/movies${queryString}`
+      );
       const data = await res.json();
       setMovies(data);
     } catch (err) {
@@ -77,7 +79,7 @@ const MovieFilter = () => {
               setGenre("");
               setMinRating("");
               setMaxRating("");
-              setMovies([]); 
+              setMovies([]);
             }}
             className="bg-gray-700 px-4 py-2 rounded font-semibold"
           >

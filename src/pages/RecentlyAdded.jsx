@@ -7,12 +7,12 @@ const RecentlyAdded = () => {
   const [loading, setLoading] = useState(true);
 
   const { ref, inView } = useInView({
-    triggerOnce: false, 
+    triggerOnce: false,
     threshold: 0.2,
   });
 
   useEffect(() => {
-    fetch("http://localhost:3000/movies")
+    fetch("https://movie-master-studio-server.vercel.app/movies")
       .then((res) => res.json())
       .then((data) => {
         const moviesWithPoster = data.filter((movie) => movie.posterUrl);
@@ -39,7 +39,9 @@ const RecentlyAdded = () => {
       style={{ animationDuration: "0s" }} // duration-0
     >
       <div className="w-11/12 mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-2">🆕 Recently Added</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-2">
+          🆕 Recently Added
+        </h2>
         <p className="text-gray-400 mb-10 text-lg">
           Catch the latest hits fresh from our collection
         </p>
@@ -52,7 +54,10 @@ const RecentlyAdded = () => {
               <div
                 key={movie._id}
                 className={`bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300 animate__animated animate__zoomIn`}
-                style={{ animationDelay: `${index * 0.2}s`, animationDuration: "0s" }} // staggered + duration-0
+                style={{
+                  animationDelay: `${index * 0.2}s`,
+                  animationDuration: "0s",
+                }} // staggered + duration-0
               >
                 <img
                   src={movie.posterUrl || "https://via.placeholder.com/200x300"}

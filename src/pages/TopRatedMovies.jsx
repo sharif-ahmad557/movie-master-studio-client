@@ -12,7 +12,7 @@ const TopRatedMovies = () => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3000/movies")
+    fetch("https://movie-master-studio-server.vercel.app/movies")
       .then((res) => res.json())
       .then((data) => {
         const top = data.sort((a, b) => b.rating - a.rating).slice(0, 5);

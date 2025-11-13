@@ -9,7 +9,7 @@ const AllMovies = () => {
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:3000/movies")
+    fetch("https://movie-master-studio-server.vercel.app/movies")
       .then((res) => res.json())
       .then((data) => {
         setMovies(data);

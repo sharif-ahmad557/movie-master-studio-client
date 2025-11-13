@@ -9,12 +9,12 @@ import { useInView } from "react-intersection-observer";
 const HeroSection = () => {
   const [movies, setMovies] = useState([]);
   const { ref, inView } = useInView({
-    triggerOnce: true, 
+    triggerOnce: true,
     threshold: 0.2,
   });
 
   useEffect(() => {
-    fetch("http://localhost:3000/movies")
+    fetch("https://movie-master-studio-server.vercel.app/movies")
       .then((res) => res.json())
       .then((data) => {
         const featured = data.filter((m) => m.rating >= 8);

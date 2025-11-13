@@ -9,7 +9,7 @@ const StatisticsSection = () => {
   const [loading, setLoading] = useState(true);
 
   const { ref, inView } = useInView({
-    triggerOnce: false, 
+    triggerOnce: false,
     threshold: 0.2,
   });
 
@@ -17,8 +17,8 @@ const StatisticsSection = () => {
     const fetchStats = async () => {
       try {
         const [moviesRes, usersRes] = await Promise.all([
-          fetch("http://localhost:3000/movies"),
-          fetch("http://localhost:3000/users"),
+          fetch("https://movie-master-studio-server.vercel.app/movies"),
+          fetch("https://movie-master-studio-server.vercel.app/users"),
         ]);
 
         const moviesData = await moviesRes.json();

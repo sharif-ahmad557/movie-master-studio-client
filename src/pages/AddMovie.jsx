@@ -36,21 +36,24 @@ const AddMovie = () => {
       releaseYear: Number(movie.releaseYear),
       rating: Number(movie.rating),
       duration: Number(movie.duration),
-      email: user.email, 
+      email: user.email,
     };
 
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:3000/movies", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newMovie),
-      });
+      const res = await fetch(
+        "https://movie-master-studio-server.vercel.app/movies",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newMovie),
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to add movie");
 
       toast.success("Movie added successfully!");
-      navigate("/mycollection"); 
+      navigate("/mycollection");
     } catch (err) {
       console.error(err);
       toast.error("Failed to add movie");
@@ -63,7 +66,10 @@ const AddMovie = () => {
     <div className="w-full py-16 bg-gray-950 text-white">
       <h2 className="text-3xl text-center font-bold mb-6">Add New Movie</h2>
 
-      <form onSubmit={handleSubmit} className="w-11/12 md:w-2/3 mx-auto flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-11/12 md:w-2/3 mx-auto flex flex-col gap-4"
+      >
         {/* Title */}
         <input
           type="text"

@@ -25,7 +25,7 @@ const UpdateMovie = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/movies/${id}`)
+    fetch(`https://movie-master-studio-server.vercel.app/movies/${id}`)
       .then((res) => res.json())
       .then((data) => {
         if (!data) throw new Error("Movie not found");
@@ -58,7 +58,7 @@ const UpdateMovie = () => {
       releaseYear: Number(movie.releaseYear),
     };
 
-    fetch(`http://localhost:3000/movies/${id}`, {
+    fetch(`https://movie-master-studio-server.vercel.app/movies/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedMovie),

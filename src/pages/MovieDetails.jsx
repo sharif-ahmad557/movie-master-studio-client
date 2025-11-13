@@ -5,12 +5,12 @@ import toast from "react-hot-toast";
 
 const MovieDetails = () => {
   const { id } = useParams();
-  const [movie, setMovie] = useState(null); 
+  const [movie, setMovie] = useState(null);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/movies/${id}`)
+    fetch(`https://movie-master-studio-server.vercel.app/movies/${id}`)
       .then((res) => res.json())
       .then((data) => setMovie(data))
       .catch(() => toast.error("Failed to load movie details"));
@@ -18,7 +18,7 @@ const MovieDetails = () => {
 
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this movie?")) {
-      fetch(`http://localhost:3000/movies/${id}`, {
+      fetch(`https://movie-master-studio-server.vercel.app/movies/${id}`, {
         method: "DELETE",
       })
         .then((res) => {
