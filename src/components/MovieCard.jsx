@@ -41,15 +41,15 @@ const MovieCard = ({ movie }) => {
           onClick={handleWatchlistToggle}
           className={`w-1/2 py-2 font-semibold rounded transition ${
             isInWatchlist
-              ? "bg-red-500 text-white hover:bg-red-600"
-              : "bg-yellow-500 text-black hover:bg-yellow-600"
+              ? "btn btn-dash btn-warning"
+              : "btn btn-dash btn-warning"
           }`}
         >
           {isInWatchlist ? "Remove Watchlist" : "Add Watchlist"}
         </button>
         <button
           onClick={() => navigate(`/movies/${movie._id}`)}
-          className="w-1/2 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition"
+          className="w-1/2 py-2 btn btn-dash btn-warning"
         >
           Details
         </button>

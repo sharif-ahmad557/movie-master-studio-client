@@ -3,8 +3,9 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+
 import AuthProvider from "./provider/AuthProvider.jsx";
-import "animate.css";
+import WatchlistProvider from "./provider/WatchlistProvider.jsx";
 
 import MainLayout from "./layout/MainLayout.jsx";
 import Home from "./pages/Home.jsx";
@@ -18,8 +19,8 @@ import UpdateMovie from "./pages/UpdateMovie.jsx";
 import AddMovie from "./pages/AddMovie.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import MyWatchlist from "./pages/MyWatchlist.jsx";
-import WatchlistProvider from "./provider/WatchlistProvider.jsx";
 import Watchlist from "./pages/Watchlist.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -80,11 +81,11 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
-      <WatchlistProvider>
-        <Toaster position="top-right" reverseOrder={false} />
-        <RouterProvider router={router} />
-      </WatchlistProvider>
-    </AuthProvider>
+      <AuthProvider>
+        <WatchlistProvider>
+          <Toaster position="top-right" reverseOrder={false} />
+          <RouterProvider router={router} />
+        </WatchlistProvider>
+      </AuthProvider>
   </StrictMode>
 );
