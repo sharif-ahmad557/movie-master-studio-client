@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { FaFilm, FaUsers } from "react-icons/fa";
+import { useInView } from "react-intersection-observer";
+import "animate.css";
 
 const StatisticsSection = () => {
   const [movieCount, setMovieCount] = useState(0);
   const [userCount, setUserCount] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const { ref, inView } = useInView({
+    triggerOnce: false, 
+    threshold: 0.2,
+  });
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -30,7 +37,14 @@ const StatisticsSection = () => {
   }, []);
 
   return (
-    <div className="w-full bg-gray-950 text-white py-16">
+    <div
+      ref={ref}
+      className={`w-full bg-gray-950 text-white py-16 transition-transform duration-0 ${
+        inView
+          ? "animate__animated animate__zoomIn animate__faster"
+          : "opacity-0 translate-y-10"
+      }`}
+    >
       <div className="w-11/12 mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-3">
           📊 Platform Statistics

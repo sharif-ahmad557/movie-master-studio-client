@@ -11,8 +11,7 @@ const Profile = () => {
   const [name, setName] = useState(user?.displayName || "");
   const [email, setEmail] = useState(user?.email || "");
   const [photoURL, setPhotoURL] = useState(user?.photoURL || "");
-  const [password, setPassword] = useState(""); // Recent login জন্য
-
+  const [password, setPassword] = useState(""); 
   const handleLogout = () => {
     logOut()
       .then(() => toast.success("Logged out successfully"))
@@ -22,10 +21,8 @@ const Profile = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      // DisplayName & PhotoURL আপডেট
       await updateUserProfile(name, photoURL);
 
-      // Email পরিবর্তনের জন্য
       if (email !== user.email) {
         if (!password) {
           toast.error("Please enter your password to update email");
@@ -38,7 +35,7 @@ const Profile = () => {
 
       toast.success("Profile updated successfully");
       setShowForm(false);
-      setPassword(""); // Password clear
+      setPassword(""); 
     } catch (err) {
       toast.error(err.message);
     }
@@ -132,13 +129,13 @@ const Profile = () => {
                   <button
                     type="button"
                     onClick={() => setShowForm(false)}
-                    className="px-4 py-2 w-1/2 bg-gray-600 rounded hover:bg-gray-700 transition"
+                    className="px-4 py-2 w-1/2 btn btn-dash btn-warning"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 w-1/2 bg-blue-600 rounded hover:bg-blue-700 transition"
+                    className="px-4 py-2 w-1/2 btn btn-dash btn-warning"
                   >
                     Save
                   </button>

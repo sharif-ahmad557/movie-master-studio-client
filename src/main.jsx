@@ -16,7 +16,10 @@ import Profile from "./pages/Profile.jsx";
 import MovieDetails from "./pages/MovieDetails.jsx";
 import UpdateMovie from "./pages/UpdateMovie.jsx";
 import AddMovie from "./pages/AddMovie.jsx";
-
+import ProtectedRoute from "./routes/ProtectedRoute.jsx";
+import MyWatchlist from "./pages/MyWatchlist.jsx";
+import WatchlistProvider from "./provider/WatchlistProvider.jsx";
+import Watchlist from "./pages/Watchlist.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -24,23 +27,53 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "allmovies", element: <AllMovies /> },
-      { path: "mycollection", element: <MyCollection /> },
-      { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> },
+      // Protected routes
+      {
+        path: "mycollection",
+        element: (
+          <ProtectedRoute>
+            <MyCollection />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: "profile",
-        element: <Profile />,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: "movies/:id",
-        element: <MovieDetails />,
+        path: "movies/add",
+        element: (
+          <ProtectedRoute>
+            <AddMovie />
+          </ProtectedRoute>
+        ),
       },
-      { path: "update/:id", element: <UpdateMovie /> },
-      { path: "movies/add", element: <AddMovie /> },
       {
-        path: "/update-movie/:id",
-        element: <UpdateMovie />,
+        path: "update-movie/:id",
+        element: (
+          <ProtectedRoute>
+            <UpdateMovie />
+          </ProtectedRoute>
+        ),
       },
+      {
+        path: "watchlist",
+        element: (
+          <ProtectedRoute>
+            <MyWatchlist />
+          </ProtectedRoute>
+        ),
+      },
+      { path: "watchlist", element: <Watchlist /> },
+
+      // Public routes
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "movies/:id", element: <MovieDetails /> },
     ],
   },
 ]);
@@ -48,8 +81,10 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-      <Toaster position="top-right" reverseOrder={false} />
-      <RouterProvider router={router} />
+      <WatchlistProvider>
+        <Toaster position="top-right" reverseOrder={false} />
+        <RouterProvider router={router} />
+      </WatchlistProvider>
     </AuthProvider>
   </StrictMode>
 );

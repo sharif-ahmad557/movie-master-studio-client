@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "animate.css";
+import { useInView } from "react-intersection-observer";
 
 const HeroSection = () => {
   const [movies, setMovies] = useState([]);
+  const { ref, inView } = useInView({
+    triggerOnce: true, 
+    threshold: 0.2,
+  });
 
   useEffect(() => {
     fetch("http://localhost:3000/movies")
@@ -31,7 +37,12 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="w-full bg-gray-900 text-white py-8">
+    <div
+      ref={ref}
+      className={`w-full bg-gray-900 text-white py-8 ${
+        inView ? "animate__animated animate__bounceInUp" : ""
+      }`}
+    >
       <div className="w-11/12 mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold mb-2 text-center">
           🎬 Featured Movies
@@ -53,16 +64,13 @@ const HeroSection = () => {
                     src={movie.posterUrl}
                     alt={movie.title}
                     referrerPolicy="no-referrer"
-                    className="w-full h-full"
+                    className="w-full h-full object-cover"
                   />
-
                   <div className="absolute inset-0 bg-black/60 flex flex-col justify-center items-center text-center p-4 text-white">
                     <h3 className="text-2xl font-semibold">{movie.title}</h3>
                     <p className="text-gray-300 mb-3">
                       ⭐ {movie.rating} | {movie.genre} | 📅 {movie.releaseYear}
                     </p>
-
-                    {/* Dynamic route to movie details page */}
                     <Link to={`/movies/${movie._id}`}>
                       <button className="btn btn-dash btn-warning">
                         View Details

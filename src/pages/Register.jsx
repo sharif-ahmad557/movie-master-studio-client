@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
 import { toast } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import "animate.css";
 
 const Register = () => {
   const { createUser, updateUserProfile, googleLogin } =
@@ -14,10 +15,14 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [photoURL, setPhotoURL] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // 👈 password toggle state
+  const [showPassword, setShowPassword] = useState(false);
+  const [animate, setAnimate] = useState(false); 
 
-  // Email/password register
-  const handleRegister = (e) => {
+  useEffect(() => {
+    setAnimate(true);
+  }, []);
+
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     if (!/(?=.*[A-Z])/.test(password)) {
@@ -33,36 +38,44 @@ const Register = () => {
       return;
     }
 
-    createUser(email, password)
-      .then(() => {
-        updateUserProfile(name, photoURL)
-          .then(() => {
-            toast.success("Registration successful!");
-            navigate("/");
-          })
-          .catch((err) => toast.error(err.message));
-      })
-      .catch((err) => toast.error(err.message));
+    try {
+      const result = await createUser(email, password);
+
+      await updateUserProfile(name, photoURL);
+
+      if (result.user) {
+        result.user.displayName = name;
+        result.user.photoURL = photoURL;
+      }
+
+      toast.success("Registration successful!");
+      navigate("/");
+    } catch (err) {
+      toast.error(err.message || "Registration failed!");
+    }
   };
 
-  // Google login
-  const handleGoogle = () => {
-    googleLogin()
-      .then(() => {
-        toast.success("Logged in with Google");
-        navigate("/");
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
+  const handleGoogle = async () => {
+    try {
+      await googleLogin();
+      toast.success("Logged in with Google");
+      navigate("/");
+    } catch (err) {
+      toast.error(err.message || "Google Login failed!");
+    }
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-950">
-      <div className="bg-gray-800 text-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <div
+        className={`bg-gray-800 text-white p-8 rounded-lg shadow-md w-full max-w-md transition-all duration-0 ${
+          animate ? "animate__animated animate__fadeInUp" : ""
+        }`}
+      >
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
 
         <form onSubmit={handleRegister} className="space-y-4">
+          {/* Name */}
           <div>
             <label className="block font-medium mb-1">Name</label>
             <input
@@ -73,6 +86,8 @@ const Register = () => {
               className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
+
+          {/* Email */}
           <div>
             <label className="block font-medium mb-1">Email</label>
             <input
@@ -83,6 +98,8 @@ const Register = () => {
               className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
+
+          {/* Photo URL */}
           <div>
             <label className="block font-medium mb-1">Photo URL</label>
             <input
@@ -93,10 +110,12 @@ const Register = () => {
               className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
+
+          {/* Password */}
           <div className="relative">
             <label className="block font-medium mb-1">Password</label>
             <input
-              type={showPassword ? "text" : "password"} // 👈 toggle type
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -114,10 +133,9 @@ const Register = () => {
               )}
             </button>
           </div>
-          <button
-            type="submit"
-            className="w-full btn btn-dash btn-warning"
-          >
+
+          {/* Register button */}
+          <button type="submit" className="w-full btn btn-dash btn-warning">
             Register
           </button>
         </form>
@@ -132,6 +150,7 @@ const Register = () => {
           </button>
         </div>
 
+        {/* Login link */}
         <p className="mt-4 text-center">
           Already have an account?{" "}
           <Link to="/login" className="text-blue-300 font-medium">

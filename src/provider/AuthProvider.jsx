@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
@@ -26,7 +26,7 @@ const AuthProvider = ({ children }) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  const signIn = (email, password) => {
+  const logIn = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
@@ -43,7 +43,6 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  // ✅ নতুন ফাংশন: ইমেইল আপডেট করার জন্য
   const updateUserEmail = (newEmail) => {
     if (!auth.currentUser) throw new Error("No user logged in");
     return updateEmail(auth.currentUser, newEmail);
@@ -66,7 +65,7 @@ const AuthProvider = ({ children }) => {
     user,
     loading,
     createUser,
-    signIn,
+    logIn,
     googleLogin,
     updateUserProfile,
     updateUserEmail,
@@ -77,5 +76,6 @@ const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
+
 export const useAuth = () => useContext(AuthContext);
 export default AuthProvider;
