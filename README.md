@@ -1,16 +1,30 @@
-# React + Vite
+# Movie Master Studio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Screenshot](https://i.postimg.cc/HxJCzhFv/screencapture-roaring-tiramisu-bd059b-netlify-app-2025-11-19-14-11-07.png)
+## Overview
+Movie Master Studio is a full-stack movie management platform built with the MERN stack. Users can browse and explore a wide collection of movies, add new movies, edit existing ones, and submit their reviews. The platform offers an intuitive interface for managing movie details efficiently. It also features user authentication and a responsive design for seamless experience across devices.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+- User Authentication with Firebase  
+- CRUD operations for movies  
+- Responsive UI with React & Tailwind  
+- Search & filter movies  
 
-## React Compiler
+## Tech Stack
+React, Tailwind CSS, Node.js, Express, MongoDB, Firebase
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Dependencies
+- react-router-dom  
+- express  
+- mongoose  
+- firebase  
 
-## Expanding the ESLint configuration
+## Installation
+1. Clone the repo: `git clone https://github.com/sharif-ahmad557/movie-master-studio.git`  
+2. Install dependencies: `npm install`  
+3. Run server: `nodemon index.js`  
+4. Run client: `npm run deb`  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Live Demo
+[Click here to see live](https://roaring-tiramisu-bd059b.netlify.app/)
