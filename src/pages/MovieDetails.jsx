@@ -10,7 +10,7 @@ const MovieDetails = () => {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch(`https://movie-master-studio-server.vercel.app/movies/${id}`)
+    fetch(`https://movie-master-studio-server-uw8f.vercel.app/movies/${id}`)
       .then((res) => res.json())
       .then((data) => setMovie(data))
       .catch(() => toast.error("Failed to load movie details"));
@@ -18,7 +18,7 @@ const MovieDetails = () => {
 
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this movie?")) {
-      fetch(`https://movie-master-studio-server.vercel.app/movies/${id}`, {
+      fetch(`https://movie-master-studio-server-uw8f.vercel.app/movies/${id}`, {
         method: "DELETE",
       })
         .then((res) => {

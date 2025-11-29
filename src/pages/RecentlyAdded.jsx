@@ -12,7 +12,7 @@ const RecentlyAdded = () => {
   });
 
   useEffect(() => {
-    fetch("https://movie-master-studio-server.vercel.app/movies")
+    fetch("https://movie-master-studio-server-uw8f.vercel.app/movies")
       .then((res) => res.json())
       .then((data) => {
         const moviesWithPoster = data.filter((movie) => movie.posterUrl);

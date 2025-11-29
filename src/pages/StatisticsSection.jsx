@@ -17,8 +17,8 @@ const StatisticsSection = () => {
     const fetchStats = async () => {
       try {
         const [moviesRes, usersRes] = await Promise.all([
-          fetch("https://movie-master-studio-server.vercel.app/movies"),
-          fetch("https://movie-master-studio-server.vercel.app/users"),
+          fetch("https://movie-master-studio-server-uw8f.vercel.app/movies"),
+          fetch("https://movie-master-studio-server-uw8f.vercel.app/users"),
         ]);
 
         const moviesData = await moviesRes.json();

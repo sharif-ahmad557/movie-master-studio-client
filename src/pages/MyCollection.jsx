@@ -14,7 +14,7 @@ const MyCollection = () => {
   useEffect(() => {
     if (!user) return;
     fetch(
-      `https://movie-master-studio-server.vercel.app/movies?email=${user.email}`
+      `https://movie-master-studio-server-uw8f.vercel.app/movies?email=${user.email}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -31,7 +31,7 @@ const MyCollection = () => {
   const handleDelete = (id) => {
     if (!window.confirm("Are you sure you want to delete this movie?")) return;
 
-    fetch(`https://movie-master-studio-server.vercel.app/movies/${id}`, {
+    fetch(`https://movie-master-studio-server-uw8f.vercel.app/movies/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

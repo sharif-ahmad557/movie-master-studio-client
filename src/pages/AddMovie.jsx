@@ -42,7 +42,7 @@ const AddMovie = () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "https://movie-master-studio-server.vercel.app/movies",
+        "https://movie-master-studio-server-uw8f.vercel.app/movies",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
