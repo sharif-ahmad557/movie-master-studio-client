@@ -33,4 +33,4 @@ React, Tailwind CSS, Node.js, Express, MongoDB, Firebase
 
 ## Live Demo
 
-[Click here to see live](https://roaring-tiramisu-bd059b.netlify.app/)
+[Click here to see live](https://movie-master-studio-client-jatb.vercel.app/)
