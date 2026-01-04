@@ -1,11 +1,13 @@
 @import "tailwindcss";
-
 @plugin "daisyui";
-@plugin "daisyui/theme" {
-  name: "light";
-  default: true;
-  --color-primary: blue;
-  --color-secondary: teal;
+
+/* Force Background Color Change */
+html,
+body {
+  background-color: var(--fallback-b1, oklch(var(--b1) / 1)) !important;
+  color: var(--fallback-bc, oklch(var(--bc) / 1)) !important;
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
 }
 
 @keyframes fadeInUp {
@@ -21,8 +23,4 @@
 
 @utility animate-fadeInUp {
   animation: fadeInUp 1s ease-out forwards;
-}
-
-body {
-  background-color: white;
 }

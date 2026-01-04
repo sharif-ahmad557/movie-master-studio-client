@@ -5,6 +5,9 @@ import TopRatedMovies from "./TopRatedMovies";
 import RecentlyAdded from "./RecentlyAdded";
 import GenreSection from "./GenreSection";
 import AboutPlatform from "./AboutPlatform";
+import Newsletter from "./Newsletter";
+import FAQSection from "./FAQSection";
+import Testimonials from "./Testimonials";
 
 const Home = () => {
   return (
@@ -15,6 +18,9 @@ const Home = () => {
       <RecentlyAdded />
       <GenreSection />
       <AboutPlatform />
+      <Newsletter />
+      <FAQSection />
+      <Testimonials />
     </div>
   );
 };

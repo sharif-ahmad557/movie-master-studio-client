@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" fill="none">
+  <defs>
+    <linearGradient id="favGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff5f6d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffc371;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="30" cy="30" r="28" fill="url(#favGradient)" />
+  
+  <!-- Play Icon -->
+  <path d="M38 30L24 20V40L38 30Z" fill="white" />
+</svg>

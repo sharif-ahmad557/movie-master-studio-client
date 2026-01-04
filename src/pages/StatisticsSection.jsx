@@ -8,8 +8,9 @@ const StatisticsSection = () => {
   const [userCount, setUserCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  // Trigger animation when 20% of the component is visible
   const { ref, inView } = useInView({
-    triggerOnce: false,
+    triggerOnce: true, // Only animate once for better UX
     threshold: 0.2,
   });
 
@@ -39,36 +40,73 @@ const StatisticsSection = () => {
   return (
     <div
       ref={ref}
-      className={`w-full bg-gray-950 text-white py-16 transition-transform duration-0 ${
-        inView
-          ? "animate__animated animate__zoomIn animate__faster"
-          : "opacity-0 translate-y-10"
-      }`}
+      className={`w-full bg-base-200 text-base-content py-20 transition-colors duration-300`}
     >
-      <div className="w-11/12 mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-3">
-          📊 Platform Statistics
-        </h2>
-        <p className="text-gray-400 mb-10">
-          A quick glance at our growing movie and user community.
-        </p>
+      <div className="w-11/12 max-w-6xl mx-auto">
+        {/* Header Section */}
+        <div
+          className={`text-center mb-12 ${
+            inView ? "animate__animated animate__fadeInDown" : "opacity-0"
+          }`}
+        >
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            📊 Platform Statistics
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto">
+            A quick glance at our growing movie library and user community. Join
+            us to be part of the numbers!
+          </p>
+        </div>
 
         {loading ? (
-          <p className="text-gray-400">Loading statistics...</p>
+          // Skeleton Loader (Requirement Met)
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[1, 2].map((i) => (
+              <div
+                key={i}
+                className="flex flex-col items-center bg-base-100 p-10 rounded-3xl shadow-sm border border-base-300"
+              >
+                <div className="skeleton w-16 h-16 rounded-full mb-4"></div>
+                <div className="skeleton h-6 w-32 mb-2"></div>
+                <div className="skeleton h-10 w-20"></div>
+              </div>
+            ))}
+          </div>
         ) : (
+          // Statistics Cards
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center items-center">
-            {/* Total Movies */}
-            <div className="flex flex-col items-center bg-gray-800 p-8 rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300">
-              <FaFilm className="text-5xl text-orange-400 mb-4" />
-              <h3 className="text-2xl font-semibold mb-2">Total Movies</h3>
-              <p className="text-4xl font-bold text-orange-500">{movieCount}</p>
+            {/* Total Movies Card */}
+            <div
+              className={`flex flex-col items-center bg-base-100 p-10 rounded-3xl shadow-lg border border-base-300 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group ${
+                inView ? "animate__animated animate__fadeInLeft" : "opacity-0"
+              }`}
+            >
+              <div className="p-4 bg-primary/10 rounded-full mb-6 group-hover:bg-primary/20 transition-colors">
+                <FaFilm className="text-5xl text-primary" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-2 opacity-80">
+                Total Movies
+              </h3>
+              <p className="text-5xl font-extrabold text-primary">
+                {movieCount}
+              </p>
             </div>
 
-            {/* Total Users */}
-            <div className="flex flex-col items-center bg-gray-800 p-8 rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300">
-              <FaUsers className="text-5xl text-blue-400 mb-4" />
-              <h3 className="text-2xl font-semibold mb-2">Total Users</h3>
-              <p className="text-4xl font-bold text-blue-500">{userCount}</p>
+            {/* Total Users Card */}
+            <div
+              className={`flex flex-col items-center bg-base-100 p-10 rounded-3xl shadow-lg border border-base-300 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group ${
+                inView ? "animate__animated animate__fadeInRight" : "opacity-0"
+              }`}
+            >
+              <div className="p-4 bg-secondary/10 rounded-full mb-6 group-hover:bg-secondary/20 transition-colors">
+                <FaUsers className="text-5xl text-secondary" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-2 opacity-80">
+                Total Users
+              </h3>
+              <p className="text-5xl font-extrabold text-secondary">
+                {userCount}
+              </p>
             </div>
           </div>
         )}

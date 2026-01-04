@@ -7,7 +7,11 @@ import { Toaster } from "react-hot-toast";
 import AuthProvider from "./provider/AuthProvider.jsx";
 import WatchlistProvider from "./provider/WatchlistProvider.jsx";
 
+// Layouts
 import MainLayout from "./layout/MainLayout.jsx";
+import DashboardLayout from "./layout/DashboardLayout.jsx";
+
+// Pages
 import Home from "./pages/Home.jsx";
 import AllMovies from "./pages/AllMovies.jsx";
 import MyCollection from "./pages/MyCollection.jsx";
@@ -17,75 +21,75 @@ import Profile from "./pages/Profile.jsx";
 import MovieDetails from "./pages/MovieDetails.jsx";
 import UpdateMovie from "./pages/UpdateMovie.jsx";
 import AddMovie from "./pages/AddMovie.jsx";
-import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import MyWatchlist from "./pages/MyWatchlist.jsx";
-import Watchlist from "./pages/Watchlist.jsx";
+import DashboardHome from "./pages/Dashboard/DashboardHome.jsx";
+import Contact from "./pages/Contact.jsx";
+import NotFound from "./pages/NotFound.jsx";
+
+// Routes
+import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
+  // 1. PUBLIC ROUTES (Main Website Layout)
   {
     path: "/",
     element: <MainLayout />,
     children: [
       { index: true, element: <Home /> },
       { path: "allmovies", element: <AllMovies /> },
-      // Protected routes
+      { path: "movies/:id", element: <MovieDetails /> }, 
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "contact", element: <Contact /> },
+      { path: "*", element: <NotFound /> },
+    ],
+  },
+
+  // 2. DASHBOARD ROUTES (Private & Dashboard Layout)
+  // Requirement 7: Private CRUD pages must be inside the dashboard
+  {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+    children: [
       {
-        path: "mycollection",
-        element: (
-          <ProtectedRoute>
-            <MyCollection />
-          </ProtectedRoute>
-        ),
+        index: true,
+        element: <DashboardHome />, // Overview / Stats
       },
       {
         path: "profile",
-        element: (
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        ),
+        element: <Profile />,
       },
       {
-        path: "movies/add",
-        element: (
-          <ProtectedRoute>
-            <AddMovie />
-          </ProtectedRoute>
-        ),
+        path: "my-collection",
+        element: <MyCollection />,
+      },
+      {
+        path: "add-movie",
+        element: <AddMovie />,
       },
       {
         path: "update-movie/:id",
-        element: (
-          <ProtectedRoute>
-            <UpdateMovie />
-          </ProtectedRoute>
-        ),
+        element: <UpdateMovie />,
       },
       {
-        path: "watchlist",
-        element: (
-          <ProtectedRoute>
-            <MyWatchlist />
-          </ProtectedRoute>
-        ),
+        path: "my-watchlist",
+        element: <MyWatchlist />,
       },
-      { path: "watchlist", element: <Watchlist /> },
-
-      // Public routes
-      { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> },
-      { path: "movies/:id", element: <MovieDetails /> },
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-      <AuthProvider>
-        <WatchlistProvider>
-          <Toaster position="top-right" reverseOrder={false} />
-          <RouterProvider router={router} />
-        </WatchlistProvider>
-      </AuthProvider>
+    <AuthProvider>
+      <WatchlistProvider>
+        <Toaster position="top-right" reverseOrder={false} />
+        <RouterProvider router={router} />
+      </WatchlistProvider>
+    </AuthProvider>
   </StrictMode>
 );

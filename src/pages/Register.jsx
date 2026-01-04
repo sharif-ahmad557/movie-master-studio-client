@@ -4,6 +4,7 @@ import { AuthContext } from "../provider/AuthProvider";
 import { toast } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { FaUserPlus } from "react-icons/fa";
 import "animate.css";
 
 const Register = () => {
@@ -16,7 +17,7 @@ const Register = () => {
   const [photoURL, setPhotoURL] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [animate, setAnimate] = useState(false); 
+  const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
     setAnimate(true);
@@ -25,6 +26,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    // Password Validation (As per logic)
     if (!/(?=.*[A-Z])/.test(password)) {
       toast.error("Password must contain at least 1 uppercase letter.");
       return;
@@ -41,14 +43,16 @@ const Register = () => {
     try {
       const result = await createUser(email, password);
 
+      // Update Profile
       await updateUserProfile(name, photoURL);
 
+      // Manually update local state if needed immediately
       if (result.user) {
         result.user.displayName = name;
         result.user.photoURL = photoURL;
       }
 
-      toast.success("Registration successful!");
+      toast.success("Registration successful! Welcome aboard.");
       navigate("/");
     } catch (err) {
       toast.error(err.message || "Registration failed!");
@@ -66,95 +70,121 @@ const Register = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-950">
+    <div className="flex justify-center items-center min-h-screen bg-base-200 py-10 px-4 transition-colors duration-300">
       <div
-        className={`bg-gray-800 text-white p-8 rounded-lg shadow-md w-full max-w-md transition-all duration-0 ${
-          animate ? "animate__animated animate__fadeInUp" : ""
+        className={`bg-base-100 text-base-content p-8 rounded-2xl shadow-xl w-full max-w-md border border-base-300 transition-all duration-500 ${
+          animate ? "animate__animated animate__fadeInUp" : "opacity-0"
         }`}
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold mb-2">Create Account</h2>
+          <p className="text-gray-500 text-sm">
+            Join us to start your movie journey
+          </p>
+        </div>
 
         <form onSubmit={handleRegister} className="space-y-4">
           {/* Name */}
-          <div>
-            <label className="block font-medium mb-1">Name</label>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-medium">Full Name</span>
+            </label>
             <input
               type="text"
+              placeholder="e.g. John Doe"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="input input-bordered w-full focus:input-primary bg-base-200"
             />
           </div>
 
           {/* Email */}
-          <div>
-            <label className="block font-medium mb-1">Email</label>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-medium">Email Address</span>
+            </label>
             <input
               type="email"
+              placeholder="e.g. john@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="input input-bordered w-full focus:input-primary bg-base-200"
             />
           </div>
 
           {/* Photo URL */}
-          <div>
-            <label className="block font-medium mb-1">Photo URL</label>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-medium">Photo URL</span>
+            </label>
             <input
-              type="text"
+              type="url"
+              placeholder="https://example.com/photo.jpg"
               value={photoURL}
               onChange={(e) => setPhotoURL(e.target.value)}
-              placeholder="https://example.com/photo.jpg"
-              className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+              className="input input-bordered w-full focus:input-primary bg-base-200"
             />
           </div>
 
           {/* Password */}
-          <div className="relative">
-            <label className="block font-medium mb-1">Password</label>
+          <div className="form-control relative">
+            <label className="label">
+              <span className="label-text font-medium">Password</span>
+            </label>
             <input
               type={showPassword ? "text" : "password"}
+              placeholder="Create a strong password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="input input-bordered w-full focus:input-primary bg-base-200"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-12 -translate-y-1/2 text-gray-600"
+              className="absolute right-4 top-[50px] -translate-y-1/2 text-gray-500 hover:text-primary transition-colors"
             >
               {showPassword ? (
-                <AiFillEyeInvisible size={22} />
+                <AiFillEyeInvisible size={20} />
               ) : (
-                <AiFillEye size={22} />
+                <AiFillEye size={20} />
               )}
             </button>
+            <label className="label">
+              <span className="label-text-alt text-gray-400">
+                Must contain uppercase, lowercase & 6+ chars.
+              </span>
+            </label>
           </div>
 
           {/* Register button */}
-          <button type="submit" className="w-full btn btn-dash btn-warning">
-            Register
+          <button
+            type="submit"
+            className="btn btn-primary w-full text-white text-lg rounded-xl mt-4 flex items-center gap-2"
+          >
+            <FaUserPlus /> Register
           </button>
         </form>
 
+        <div className="divider my-6">OR</div>
+
         {/* Google login button */}
-        <div className="mt-4 flex justify-center">
-          <button
-            onClick={handleGoogle}
-            className="w-full flex items-center gap-2 px-4 py-2 btn btn-dash btn-warning"
-          >
-            <FcGoogle size={24} /> Continue with Google
-          </button>
-        </div>
+        <button
+          onClick={handleGoogle}
+          className="btn btn-neutral w-full flex items-center justify-center gap-3 rounded-xl bg-white text-gray-800 hover:bg-gray-100 border border-gray-300 shadow-sm"
+        >
+          <FcGoogle size={24} />
+          <span className="font-medium">Continue with Google</span>
+        </button>
 
         {/* Login link */}
-        <p className="mt-4 text-center">
+        <p className="mt-6 text-center text-sm">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-300 font-medium">
-            Login
+          <Link to="/login" className="text-primary font-bold hover:underline">
+            Login here
           </Link>
         </p>
       </div>

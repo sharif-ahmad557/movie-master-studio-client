@@ -2,6 +2,14 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import { toast } from "react-hot-toast";
 import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import {
+  FaUserEdit,
+  FaSignOutAlt,
+  FaCamera,
+  FaEnvelope,
+  FaUser,
+} from "react-icons/fa";
+import "animate.css";
 
 const Profile = () => {
   const { user, logOut, updateUserProfile, updateUserEmail, auth } =
@@ -11,7 +19,8 @@ const Profile = () => {
   const [name, setName] = useState(user?.displayName || "");
   const [email, setEmail] = useState(user?.email || "");
   const [photoURL, setPhotoURL] = useState(user?.photoURL || "");
-  const [password, setPassword] = useState(""); 
+  const [password, setPassword] = useState("");
+
   const handleLogout = () => {
     logOut()
       .then(() => toast.success("Logged out successfully"))
@@ -20,12 +29,18 @@ const Profile = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    const toastId = toast.loading("Updating profile...");
+
     try {
+      // 1. Update Name & Photo
       await updateUserProfile(name, photoURL);
 
+      // 2. Update Email (if changed) - Requires Re-auth
       if (email !== user.email) {
         if (!password) {
-          toast.error("Please enter your password to update email");
+          toast.error("Please enter your password to update email", {
+            id: toastId,
+          });
           return;
         }
         const credential = EmailAuthProvider.credential(user.email, password);
@@ -33,116 +48,175 @@ const Profile = () => {
         await updateUserEmail(email);
       }
 
-      toast.success("Profile updated successfully");
+      toast.success("Profile updated successfully", { id: toastId });
       setShowForm(false);
-      setPassword(""); 
+      setPassword("");
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.message, { id: toastId });
     }
   };
 
   return (
-    <div className="bg-gray-950 min-h-screen py-10 text-white">
-      <div className="max-w-4xl mx-auto my-12 p-4">
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-          <div className="flex-shrink-0">
-            <img
-              src={photoURL || "https://i.ibb.co/YbP7V6G/default-avatar.png"}
-              alt="User Avatar"
-              className="w-48 h-48 object-cover rounded-full border-4 border-gray-300"
-            />
-          </div>
+    <div className="w-full min-h-[80vh] flex justify-center items-start pt-10 px-4">
+      <div className="card w-full max-w-3xl bg-base-100 shadow-xl overflow-hidden border border-base-300">
+        {/* Decorative Banner */}
+        <div className="h-40 bg-gradient-to-r from-primary to-secondary relative">
+          <div className="absolute inset-0 bg-black/20"></div>
+        </div>
 
-          <div className="flex-1 space-y-4">
-            <h2 className="text-3xl font-bold">{name || "User"}</h2>
-            <p className="text-gray-400">{email}</p>
-
-            <div className="flex gap-4 mt-4">
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 bg-red-600 rounded hover:bg-red-700 transition"
-              >
-                Logout
-              </button>
-              <button
-                onClick={() => setShowForm(!showForm)}
-                className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 transition"
-              >
-                Update
-              </button>
+        <div className="px-8 pb-8">
+          <div className="flex flex-col md:flex-row gap-6 items-start -mt-16 relative z-10">
+            {/* Avatar Section */}
+            <div className="flex-shrink-0 mx-auto md:mx-0">
+              <div className="avatar">
+                <div className="w-36 h-36 rounded-full ring ring-base-100 ring-offset-base-100 ring-offset-2 shadow-2xl overflow-hidden bg-base-300">
+                  <img
+                    src={
+                      photoURL || "https://i.ibb.co/YbP7V6G/default-avatar.png"
+                    }
+                    alt="User Avatar"
+                    referrerPolicy="no-referrer"
+                    className="object-cover"
+                  />
+                </div>
+              </div>
             </div>
 
-            {showForm && (
-              <form
-                onSubmit={handleUpdate}
-                className="mt-6 p-4 border rounded-lg shadow space-y-4 bg-gray-800"
-              >
-                <div>
-                  <label className="block mb-1">Name</label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full border border-gray-400 rounded px-3 py-2 bg-gray-700 text-white"
-                    required
-                  />
+            {/* Info & Actions */}
+            <div className="flex-1 text-center md:text-left pt-16 md:pt-16 space-y-2">
+              <h2 className="text-3xl font-bold text-base-content">
+                {name || "User Name"}
+              </h2>
+              <div className="flex items-center justify-center md:justify-start gap-2 text-gray-500 dark:text-gray-400">
+                <FaEnvelope />
+                <span>{email}</span>
+                {user?.emailVerified && (
+                  <span className="badge badge-success badge-xs text-white">
+                    Verified
+                  </span>
+                )}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
+                <button
+                  onClick={() => setShowForm(!showForm)}
+                  className={`btn btn-sm ${
+                    showForm ? "btn-neutral" : "btn-primary"
+                  }`}
+                >
+                  <FaUserEdit /> {showForm ? "Cancel Edit" : "Edit Profile"}
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-sm btn-outline btn-error"
+                >
+                  <FaSignOutAlt /> Logout
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Edit Form Section */}
+          {showForm && (
+            <div className="mt-8 border-t border-base-200 pt-6 animate__animated animate__fadeIn text-base-content">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <FaUserEdit className="text-primary" /> Update Information
+              </h3>
+
+              <form onSubmit={handleUpdate} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Name Input */}
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text font-medium">
+                        Display Name
+                      </span>
+                    </label>
+                    <div className="relative">
+                      <FaUser className="absolute left-3 top-3 text-gray-400" />
+                      <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="input input-bordered w-full pl-10 focus:input-primary"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Photo URL Input */}
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text font-medium">
+                        Profile Photo URL
+                      </span>
+                    </label>
+                    <div className="relative">
+                      <FaCamera className="absolute left-3 top-3 text-gray-400" />
+                      <input
+                        type="url"
+                        value={photoURL}
+                        onChange={(e) => setPhotoURL(e.target.value)}
+                        className="input input-bordered w-full pl-10 focus:input-primary"
+                        placeholder="https://..."
+                      />
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border border-gray-400 rounded px-3 py-2 bg-gray-700 text-white"
-                    required
-                  />
+                {/* Email Input */}
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">
+                      Email Address
+                    </span>
+                  </label>
+                  <div className="relative">
+                    <FaEnvelope className="absolute left-3 top-3 text-gray-400" />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="input input-bordered w-full pl-10 focus:input-primary"
+                      required
+                    />
+                  </div>
+                  {email !== user.email && (
+                    <span className="text-xs text-warning mt-1 ml-1">
+                      Changing email requires re-authentication.
+                    </span>
+                  )}
                 </div>
 
+                {/* Password Input (Conditional) */}
                 {email !== user.email && (
-                  <div>
-                    <label className="block mb-1">
-                      Enter Password to confirm
+                  <div className="form-control animate__animated animate__fadeIn">
+                    <label className="label">
+                      <span className="label-text font-bold text-warning">
+                        Confirm Password to Change Email
+                      </span>
                     </label>
                     <input
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full border border-gray-400 rounded px-3 py-2 bg-gray-700 text-white"
-                      placeholder="Your current password"
+                      className="input input-bordered w-full input-warning"
+                      placeholder="Enter your current password"
                       required
                     />
                   </div>
                 )}
 
-                <div>
-                  <label className="block mb-1">Photo URL</label>
-                  <input
-                    type="text"
-                    value={photoURL}
-                    onChange={(e) => setPhotoURL(e.target.value)}
-                    className="w-full border border-gray-400 rounded px-3 py-2 bg-gray-700 text-white"
-                  />
-                </div>
-
-                <div className="flex gap-2 mt-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowForm(false)}
-                    className="px-4 py-2 w-1/2 btn btn-dash btn-warning"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 w-1/2 btn btn-dash btn-warning"
-                  >
-                    Save
+                {/* Save Button */}
+                <div className="flex justify-end pt-2">
+                  <button type="submit" className="btn btn-primary px-8">
+                    Save Changes
                   </button>
                 </div>
               </form>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

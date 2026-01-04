@@ -1,58 +1,35 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.svg";
 import { FaSun, FaMoon } from "react-icons/fa";
-
-const ColorfulSpinner = ({ size = 48 }) => {
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <div
-        className="w-16 h-16 rounded-full animate-spin"
-        style={{
-          border: "6px solid",
-          borderImage:
-            "linear-gradient(45deg, #ff5f6d, #ffc371, #7bdff6, #9b5cff) 1",
-          borderTopColor: "transparent",
-        }}
-      ></div>
-    </div>
-  );
-};
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
-  const location = useLocation();
-  const [loading, setLoading] = useState(true);
 
   // Theme state
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
-  //  Theme toggle function
+  // Theme toggle function
   const handleThemeSwitch = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    window.dispatchEvent(new Event("themeChange"));
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
-  // Theme effect
   useEffect(() => {
-    localStorage.setItem("theme", theme);
-    document.querySelector("html").setAttribute("data-theme", theme);
+    const root = document.documentElement;
 
+    // Set for DaisyUI
+    root.setAttribute("data-theme", theme);
+
+    // Set for Tailwind Dark Mode
     if (theme === "dark") {
-      document.documentElement.classList.add("dark");
+      root.classList.add("dark");
     } else {
-      document.documentElement.classList.remove("dark");
+      root.classList.remove("dark");
     }
-  }, [theme]);
 
-  //  Page load spinner
-  useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 1200);
-    return () => clearTimeout(timer);
-  }, [location.pathname]);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   const handleLogout = () => {
     logOut()
@@ -60,172 +37,190 @@ const Navbar = () => {
       .catch((err) => console.error(err));
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen bg-gray-50 dark:bg-gray-950">
-        <ColorfulSpinner size={64} />
-      </div>
-    );
-  }
+  // Common Navigation Links
+  const navLinks = (
+    <>
+      <li>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive ? "text-primary font-bold" : "hover:text-primary"
+          }
+        >
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/allmovies"
+          className={({ isActive }) =>
+            isActive ? "text-primary font-bold" : "hover:text-primary"
+          }
+        >
+          All Movies
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/contact"
+          className={({ isActive }) =>
+            isActive ? "text-primary font-bold" : "hover:text-primary"
+          }
+        >
+          Contact
+        </NavLink>
+      </li>
+
+      {user && (
+        <>
+          <li>
+            <NavLink
+              to="/dashboard/my-collection"
+              className={({ isActive }) =>
+                isActive ? "text-primary font-bold" : "hover:text-primary"
+              }
+            >
+              My Collection
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/dashboard/add-movie"
+              className={({ isActive }) =>
+                isActive ? "text-primary font-bold" : "hover:text-primary"
+              }
+            >
+              Add Movie
+            </NavLink>
+          </li>
+        </>
+      )}
+    </>
+  );
 
   return (
-    <div
-      className={`shadow-sm transition-colors duration-500 ${
-        theme === "dark" ? "bg-black text-white" : "bg-white text-black"
-      }`}
-    >
-      <div className="shadow-sm bg-[#ebe1e1] transition-colors duration-300 ">
-        <div className="navbar w-11/12 mx-auto flex justify-between items-center">
-          {/* Left Side - Logo */}
-          <div className="navbar-start">
-            <Link to="/" className="btn btn-ghost text-xl font-semibold p-0">
-              <img src={logo} alt="Logo" className="w-32 h-32 object-contain" />
-            </Link>
-          </div>
+    <div className="sticky top-0 z-50 shadow-md bg-base-100 transition-colors duration-300">
+      <div className="navbar w-11/12 mx-auto px-0">
+        {/* Left Side - Logo */}
+        <div className="navbar-start">
+          <Link
+            to="/"
+            className="btn btn-ghost text-xl font-semibold p-0 hover:bg-transparent"
+          >
+            <img
+              src={logo}
+              alt="Logo"
+              className="h-10 md:h-12 w-auto object-contain"
+            />
+          </Link>
+        </div>
 
-          {/* Center Menu */}
-          <div className="navbar-center hidden lg:flex">
-            <ul className="menu menu-horizontal px-1 text-lg font-medium">
-              <li className="hover:text-gray-700 dark:hover:text-black">
-                <Link to="/">Home</Link>
-              </li>
-              <li className="hover:text-gray-700 dark:hover:text-black">
-                <Link to="/allmovies">All Movies</Link>
-              </li>
-              <li className="hover:text-gray-700 dark:hover:text-black">
-                <Link to="/mycollection">My Collection</Link>
-              </li>
-              <li className="hover:text-gray-700 dark:hover:text-black">
-                <Link to="/movies/add">Add Movie</Link>
-              </li>
-            </ul>
-          </div>
+        {/* Center Menu (Desktop) */}
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal px-1 text-base font-medium text-base-content">
+            {navLinks}
+          </ul>
+        </div>
 
-          {/* Right Side - User */}
-          <div className="navbar-end flex items-center gap-2">
-            {user ? (
-              <div className="dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-ghost btn-circle avatar"
-                >
-                  <div className="w-10 rounded-full">
-                    <img
-                      alt="User avatar"
-                      src={
-                        user.photoURL ||
-                        "https://i.ibb.co/YbP7V6G/default-avatar.png"
-                      }
-                    />
-                  </div>
-                </div>
-                <ul
-                  tabIndex={0}
-                  className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 dark:bg-gray-800 rounded-box w-52"
-                >
-                  <li>
-                    <p className="font-semibold text-center text-gray-900 dark:text-gray-100">
-                      {user.displayName || "User"}
-                    </p>
-                  </li>
-                  <li>
-                    <Link to="/profile">Profile</Link>
-                  </li>
-                  <li>
-                    <Link to="/watchlist">Watchlist</Link>
-                  </li>
-                  <li>
-                    <button
-                      onClick={handleLogout}
-                      className="text-red-500 font-medium"
-                    >
-                      Logout
-                    </button>
-                  </li>
-                </ul>
-              </div>
+        <div className="navbar-end flex items-center gap-2">
+          {/* Theme Toggle Button */}
+          <button
+            onClick={handleThemeSwitch}
+            className="btn btn-ghost btn-circle"
+            aria-label="Toggle Theme"
+          >
+            {theme === "light" ? (
+              <FaMoon size={20} className="text-gray-600" />
             ) : (
-              <Link to="/login">
-                <button className="btn btn-primary w-24">Login</button>
-              </Link>
+              <FaSun size={20} className="text-yellow-400" />
             )}
+          </button>
 
-            {/* Theme Button */}
-            <button
-              onClick={handleThemeSwitch}
-              className="btn btn-ghost btn-circle mr-2"
-            >
-              {theme === "light" ? (
-                <FaMoon size={20} className="text-gray-700" />
-              ) : (
-                <FaSun size={20} className="text-amber-400" />
-              )}
-            </button>
-          </div>
-
-          {/* Mobile Menu */}
-          <div className="navbar-end lg:hidden">
+          {user ? (
             <div className="dropdown dropdown-end">
-              <label
+              <div
                 tabIndex={0}
-                className="btn btn-ghost btn-circle bg-black hover:bg-gray-800 text-white transition-all duration-300"
+                role="button"
+                className="btn btn-ghost btn-circle avatar ring ring-primary ring-offset-base-100 ring-offset-2"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-900 dark:text-gray-100"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
+                <div className="w-10 rounded-full">
+                  <img
+                    alt="User avatar"
+                    src={
+                      user.photoURL ||
+                      "https://i.ibb.co/YbP7V6G/default-avatar.png"
+                    }
+                    referrerPolicy="no-referrer"
                   />
-                </svg>
-              </label>
+                </div>
+              </div>
               <ul
                 tabIndex={0}
-                className="menu menu-compact dropdown-content mt-3 p-2 shadow-lg bg-gradient-to-b from-[#ffecd2] via-[#fcb69f] to-[#ff7e5f] rounded-box w-52 transition-all duration-300"
+                className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-base-200 rounded-box w-52 border border-base-300"
               >
-                <li className="hover:bg-[#ffc371] rounded-md">
-                  <Link to="/">Home</Link>
+                <li className="mb-2 border-b border-base-300 pb-2">
+                  <p className="font-semibold text-center text-base-content truncate">
+                    {user.displayName || "User"}
+                  </p>
                 </li>
-                <li className="hover:bg-[#ffc371] rounded-md">
-                  <Link to="/allmovies">All Movies</Link>
+                <li>
+                  <Link to="/dashboard" className="justify-between">
+                    Dashboard
+                    <span className="badge badge-primary badge-sm">New</span>
+                  </Link>
                 </li>
-                <li className="hover:bg-[#ffc371] rounded-md">
-                  <Link to="/mycollection">My Collection</Link>
+                <li>
+                  <Link to="/dashboard/profile">Profile</Link>
                 </li>
-                <li className="hover:bg-[#ffc371] rounded-md">
-                  <Link to="/movies/add">Add Movie</Link>
+                <li>
+                  <Link to="/dashboard/my-watchlist">Watchlist</Link>
                 </li>
-                {user ? (
-                  <>
-                    <li className="hover:bg-[#ffc371] rounded-md">
-                      <Link to="/profile">Profile</Link>
-                    </li>
-                    <li className="hover:bg-[#ffc371] rounded-md">
-                      <Link to="/watchlist">Watchlist</Link>
-                    </li>
-                    <li className="hover:bg-[#ff6b6b] rounded-md">
-                      <button
-                        onClick={handleLogout}
-                        className="font-medium text-white"
-                      >
-                        Logout
-                      </button>
-                    </li>
-                  </>
-                ) : (
-                  <li className="hover:bg-[#ffc371] rounded-md">
-                    <Link to="/login">Login</Link>
-                  </li>
-                )}
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="text-error font-medium"
+                  >
+                    Logout
+                  </button>
+                </li>
               </ul>
             </div>
+          ) : (
+            <Link to="/login">
+              <button className="btn btn-primary btn-sm md:btn-md px-6 text-white font-semibold">
+                Login
+              </button>
+            </Link>
+          )}
+
+          {/* Mobile Dropdown Menu */}
+          <div className="dropdown dropdown-end lg:hidden ml-2">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-base-content"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-base-200 rounded-box w-52 border border-base-300"
+            >
+              {navLinks}
+            </ul>
           </div>
         </div>
       </div>

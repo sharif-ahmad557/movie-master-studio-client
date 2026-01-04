@@ -1,41 +1,55 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useAuth } from "./AuthProvider";
-import { toast } from "react-hot-toast";
+import { AuthContext } from "./AuthProvider"; // Fixed: Import Context directly
 
+// Create Context
 const WatchlistContext = createContext();
 
+// Custom Hook for easy access
+export const useWatchlist = () => {
+  return useContext(WatchlistContext);
+};
+
 const WatchlistProvider = ({ children }) => {
-  const { user } = useAuth(); 
+  const { user } = useContext(AuthContext); // Fixed: Use useContext hook
   const [watchlist, setWatchlist] = useState([]);
 
+  // 1. Load Watchlist from LocalStorage when User logs in
   useEffect(() => {
-    if (user) {
-      const stored = localStorage.getItem(`watchlist_${user.uid}`);
-      if (stored) setWatchlist(JSON.parse(stored));
-      else setWatchlist([]);
+    if (user && user.email) {
+      const stored = localStorage.getItem(`watchlist_${user.email}`);
+      if (stored) {
+        setWatchlist(JSON.parse(stored));
+      } else {
+        setWatchlist([]);
+      }
     } else {
-      setWatchlist([]);
+      setWatchlist([]); // Clear watchlist on logout
     }
   }, [user]);
 
+  // 2. Save Watchlist to LocalStorage whenever it changes
   useEffect(() => {
-    if (user) {
-      localStorage.setItem(`watchlist_${user.uid}`, JSON.stringify(watchlist));
+    if (user && user.email) {
+      localStorage.setItem(
+        `watchlist_${user.email}`,
+        JSON.stringify(watchlist)
+      );
     }
   }, [watchlist, user]);
 
+  // Add Movie Function
   const addToWatchlist = (movie) => {
-    if (watchlist.find((m) => m._id === movie._id)) {
-      toast.error("Movie is already in your watchlist");
+    const exists = watchlist.find((m) => m._id === movie._id);
+    if (exists) {
+      // Movie already exists, do nothing (Toast is handled in UI)
       return;
     }
     setWatchlist((prev) => [...prev, movie]);
-    toast.success(`${movie.title} added to your watchlist`);
   };
 
+  // Remove Movie Function
   const removeFromWatchlist = (movieId) => {
     setWatchlist((prev) => prev.filter((m) => m._id !== movieId));
-    toast.success("Movie removed from your watchlist");
   };
 
   const watchlistInfo = {
@@ -50,7 +64,5 @@ const WatchlistProvider = ({ children }) => {
     </WatchlistContext.Provider>
   );
 };
-
-export const useWatchlist = () => useContext(WatchlistContext);
 
 export default WatchlistProvider;

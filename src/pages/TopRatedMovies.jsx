@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "animate.css";
 import { useInView } from "react-intersection-observer";
+import { FaStar, FaCalendarAlt, FaVideo } from "react-icons/fa";
 
 const TopRatedMovies = () => {
   const [topMovies, setTopMovies] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const { ref, inView } = useInView({
-    triggerOnce: false, 
-    threshold: 0.2,
+    triggerOnce: true, // Animation runs once for better UX
+    threshold: 0.1,
   });
 
   useEffect(() => {
     fetch("https://movie-master-studio-server-uw8f.vercel.app/movies")
       .then((res) => res.json())
       .then((data) => {
-        const top = data.sort((a, b) => b.rating - a.rating).slice(0, 5);
+        // Sort by rating descending and take top 4 (Requirement prefers 4 cards per row)
+        const top = data.sort((a, b) => b.rating - a.rating).slice(0, 4);
         setTopMovies(top);
         setLoading(false);
       })
@@ -28,49 +31,91 @@ const TopRatedMovies = () => {
   return (
     <div
       ref={ref}
-      className={`w-full bg-gray-950 text-white py-16 transition-transform duration-0 ${
-        inView
-          ? "animate__animated animate__zoomIn animate__faster"
-          : "opacity-0 translate-y-10"
-      }`}
+      className={`w-full bg-base-200 text-base-content py-20 transition-colors duration-300`}
     >
-      <div className="w-11/12 mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-2">
-          🌟 Top Rated Movies
-        </h2>
-        <p className="text-gray-400 mb-10 text-lg">
-          The audience’s favorites you can’t miss
-        </p>
+      <div className="w-11/12 max-w-7xl mx-auto">
+        {/* Section Header */}
+        <div
+          className={`text-center mb-12 ${
+            inView ? "animate__animated animate__fadeInDown" : "opacity-0"
+          }`}
+        >
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            🌟 Top Rated Movies
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400 text-lg">
+            The audience’s favorites you can’t miss
+          </p>
+        </div>
 
         {loading ? (
-          <p className="text-gray-400">Loading top movies...</p>
+          // Requirement: Skeleton Loader
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="flex flex-col bg-base-100 rounded-xl p-4 shadow-sm border border-base-300 h-96"
+              >
+                <div className="skeleton h-48 w-full rounded-lg mb-4"></div>
+                <div className="skeleton h-4 w-3/4 mb-2"></div>
+                <div className="skeleton h-4 w-1/2 mb-4"></div>
+                <div className="mt-auto skeleton h-10 w-full rounded-lg"></div>
+              </div>
+            ))}
+          </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          // Movie Cards Grid (4 per row as per requirement)
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {topMovies.map((movie, index) => (
               <div
                 key={movie._id}
-                className={`bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300 animate__animated animate__zoomIn`}
-                style={{
-                  animationDelay: `${index * 0.2}s`,
-                  animationDuration: "0s",
-                }} 
+                className={`flex flex-col h-full bg-base-100 rounded-2xl shadow-lg border border-base-300 overflow-hidden hover:shadow-2xl transition-all duration-300 group ${
+                  inView ? "animate__animated animate__fadeInUp" : "opacity-0"
+                }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <img
-                  src={movie.posterUrl || "https://via.placeholder.com/200x300"}
-                  alt={movie.title}
-                  className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
-                />
-                <div className="p-4 text-center">
-                  <h3 className="text-xl font-semibold mb-1">{movie.title}</h3>
-                  <p className="text-gray-400 font-medium mb-2">
-                    director: {movie.director}
-                  </p>
-                  <p className="text-gray-400 font-medium mb-2">
-                    releaseYear: {movie.releaseYear}
-                  </p>
-                  <p className="text-yellow-400 font-bold text-lg">
-                    ⭐ {movie.rating.toFixed(1)}
-                  </p>
+                {/* Image Section */}
+                <div className="relative overflow-hidden h-64">
+                  <img
+                    src={
+                      movie.posterUrl || "https://via.placeholder.com/300x450"
+                    }
+                    alt={movie.title}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute top-2 right-2 badge badge-warning gap-1 font-bold shadow-md">
+                    <FaStar /> {movie.rating.toFixed(1)}
+                  </div>
+                </div>
+
+                {/* Content Section */}
+                <div className="p-5 flex flex-col flex-grow">
+                  <h3 className="text-xl font-bold mb-2 line-clamp-1 group-hover:text-primary transition-colors">
+                    {movie.title}
+                  </h3>
+
+                  <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1 mb-4">
+                    <p className="flex items-center gap-2">
+                      <FaVideo className="text-primary" />
+                      <span className="font-medium">Director:</span>{" "}
+                      {movie.director}
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <FaCalendarAlt className="text-primary" />
+                      <span className="font-medium">Year:</span>{" "}
+                      {movie.releaseYear}
+                    </p>
+                  </div>
+
+                  {/* Action Button (Requirement 3: View Details button) */}
+                  <div className="mt-auto">
+                    <Link to={`/movies/${movie._id}`}>
+                      <button className="btn btn-primary btn-outline w-full rounded-xl hover:text-white">
+                        View Details
+                      </button>
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
