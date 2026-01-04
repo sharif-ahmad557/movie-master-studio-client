@@ -2,6 +2,7 @@
 ![Screenshot](https://i.postimg.cc/kGPJd3Y9/Screenshot-3.png)
 
 **MoviePortal** is a feature-rich, full-stack web application designed for movie enthusiasts. It allows users to explore movies, manage their personal collections, create watchlists, and view dynamic statistics via an interactive dashboard. The application features a modern, responsive UI with seamless Dark/Light mode integration.
+
 🔗 **Live Website:** [https://movie-master-studio-client-jatb.vercel.app/]  
 📂 **Server Repository:** [https://github.com/sharif-ahmad557/movie-master-studio-server]
 
