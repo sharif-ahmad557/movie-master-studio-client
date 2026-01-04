@@ -69,21 +69,39 @@ Test the application features using these credentials:
 
 Follow these steps to run the project on your local machine:
 
-1. **Clone the Repository**
-   ```bash
+**1. Clone the Repository**
+   ```
    git clone https://github.com/sharif-ahmad557/movie-master-studio-client.git
-2. **Navigate to Project Directory**
- ```bash
-   cd movie-master-studio-client
-npm install
-Create a .env file in the root directory and add your Firebase keys:
+```
 
+**2. Navigate to Project Directory**
+```
+   cd movie-master-studio-client
+```
+
+**3. Install Dependencies**
+```
+   npm install
+```
+**4. Set Up Environment Variables**
+Create a `.env.local` file in the root directory and add your Firebase keys:
+```
 VITE_apiKey=YOUR_API_KEY
 VITE_authDomain=YOUR_AUTH_DOMAIN
 VITE_projectId=YOUR_PROJECT_ID
 VITE_storageBucket=YOUR_STORAGE_BUCKET
 VITE_messagingSenderId=YOUR_MESSAGING_SENDER_ID
 VITE_appId=YOUR_APP_ID
+```
+**5. Run the Application**
+```
+  npm run dev
 
-npm run dev
-Developed with ❤️ by [Sharif Ahmad]   
+```
+---
+
+<p align="center">
+  Developed with ❤️ by <b>Sharif Ahmad</b>
+  <br>
+  <a href="https://www.linkedin.com/in/shariful-islam-mern/" target="_blank">Connect on LinkedIn</a>
+</p>
